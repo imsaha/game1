@@ -1,24 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
 
 function App() {
+  const [selected, setSelected] = React.useState<number[]>([]);
+
+  const handleSelection = (index: number) => {
+    let data = [...selected];
+
+    if (data.length === 2) {
+      data.push(index);
+      data.splice(0, 1);
+    } else {
+      data.push(index);
+    }
+
+    if (selected.indexOf(index) > -1) {
+      data = selected.filter((x) => x !== index);
+    }
+
+    setSelected(data);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {new Array(16).fill(null).map((x, index) => (
+        <button
+          style={{
+            backgroundColor: selected.indexOf(index) > -1 ? "red" : "blue",
+          }}
+          key={`${index}`}
+          onClick={() => handleSelection(index)}
+        >{`Box ${index}`}</button>
+      ))}
     </div>
   );
 }
